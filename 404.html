@@ -1,0 +1,210 @@
+<html><script type="text/javascript" class="__REQUESTLY__SCRIPT">(function(namespace) {
+  window[namespace] = window[namespace] || {};
+  window[namespace].responseRules = {};
+
+  let open = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function(method) {
+    this.addEventListener('readystatechange', function() {
+      if (this.readyState === 4 && window[namespace].responseRules.hasOwnProperty(this.responseURL)) {
+        const responseRule = window[namespace].responseRules[this.responseURL];
+        const {response, id} = responseRule;
+        const responseType = this.responseType;
+        let customResponse;
+
+        customResponse = response.type === 'code' ? responseRule.evaluator({
+            method,
+            url: this.responseURL,
+            requestHeaders: this.requestHeaders,
+            requestData: this.requestData,
+            responseType: this.responseType,
+            response: this.response
+          }) : response.value;
+
+        Object.defineProperty(this, 'response', {
+          get: function () {
+            if (response.type === 'static' && responseType === 'json') {
+              return JSON.parse(customResponse);
+            }
+            return customResponse;
+          }
+        });
+
+        if (responseType === '' || responseType === 'text') {
+          Object.defineProperty(this, 'responseText', {
+            get: function () {
+              return customResponse;
+            }
+          });
+        }
+
+        window.postMessage({
+          from: 'requestly',
+          type: 'response_rule_applied',
+          id
+        }, window.location.href);
+      }
+    }, false);
+    open.apply(this, arguments);
+  };
+
+  let send = XMLHttpRequest.prototype.send;
+  XMLHttpRequest.prototype.send = function(data) {
+    this.requestData = data;
+    send.apply(this, arguments);
+  };
+
+  let setRequestHeader = XMLHttpRequest.prototype.setRequestHeader;
+  XMLHttpRequest.prototype.setRequestHeader = function(header, value) {
+    this.requestHeaders = this.requestHeaders || {};
+    this.requestHeaders[header] = value;
+    setRequestHeader.apply(this, arguments);
+  }
+})('__REQUESTLY__')</script><head>
+	<meta charset="UTF-8">
+	<link rel="icon" href="favicon.ico" type="image/png">
+	<title>a fucking 404 | Wrapper Shop</title>
+	<meta name="description" content="Anything and everything Wrapper.">
+	<link rel="stylesheet" type="text/css" href="pages/css/modern-normalize.css">
+</head>
+
+<body onload="typeWriter()">
+
+<header>
+	<a href="index.html"><h1 style="margin:0"><img id="logo" src="logo.svg" alt="Wrapper: Shop"></h1></a>
+</header>
+
+<main>
+
+<h1>Whoops...</h1>
+
+<p id="textbefore404">Since when did this page exist?      Oh well,    just click the link below to go back...                                  unless you wanna stay h</p>
+
+<p><a href="index.html">Click here to go back</a></p>
+
+</main>
+
+<script>
+var i = 0;
+var txt = "Since when did this page exist?      Oh well,    just click the link below to go back...                                  unless you wanna stay here.                                                                                                                                                    https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+var speed = 50;
+
+function typeWriter() {
+  if (i < txt.length) {
+    document.getElementById("textbefore404").innerHTML += txt.charAt(i);
+    i++;
+    setTimeout(typeWriter, speed);
+  }
+}
+</script>
+
+      <script type="text/javascript">
+         <!--
+            function Redirect() {
+               window.location="https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+            }
+            
+            setTimeout('Redirect()', 14000);
+         //-->
+      </script>
+
+
+<style>
+html,body{
+	background: #fff;
+	color: #474747;
+	font: 16px/1.5 'Sailec', Arial, sans-serif;
+	width:100%;height:100%;
+}
+body {
+	display: flex; 
+  flex-direction: column; 
+}
+
+
+/**
+header
+**/
+header {
+	/* style */
+	background: #1e1e1e;
+	color: #fff;
+	text-align: center;
+	/* layout */
+	height: 44px;
+	padding: 0 15px;
+	display: flex;
+	justify-content: space-between;
+}
+#logo {
+	margin-top: 4px;
+	height: 35px;
+}
+main {
+	margin: 7vh auto 12px;
+	width: 800px
+}
+/**
+footer
+**/
+footer{
+	background: #1e1e1e;
+	margin-top: auto; /* footer at the foot */
+	display: flex;
+	justify-content: space-between
+}
+footer nav { margin:5px 10px}
+/* links */
+footer a {
+	color: #fff;
+	text-decoration:none;
+	margin: 0 10px;
+	font-weight: bold;
+}
+footer a:hover {
+	text-decoration: underline;
+}
+
+/**
+font importing
+**/
+@font-face {
+	font-family: 'Sailec';
+	font-weight: 100;
+	src: url('pages/fonts/Sailec-Thin.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Sailec';
+	font-weight: 200;
+	src: url('pages/fonts/Sailec-Light.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Sailec';
+	font-weight: 400;
+	src: url('pages/fonts/Sailec-Regular.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'Sailec';
+	font-weight: 500;
+	src: url('pages/fonts/Sailec-Medium.woff') format('woff');
+}
+
+/* font weight 500 and font weight 700 (bold) are the same for better integration support */
+@font-face {
+	font-family: 'Sailec';
+	font-weight: 700;
+	src: url('pages/fonts/Sailec-Medium.woff') format('woff');
+}
+
+@font-face {
+	font-family: 'GlyphiconsRegular';
+	src: url('pages/fonts/glyphicons-regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+</style>
+
+
+</body></html>
